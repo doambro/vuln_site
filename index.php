@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <script src="https://api.map.baidu.com/api?v=3.0&ak=f9faa5307c9c4678c45b3616a4971a8a"></script>
+    <script src="db_config.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>渗透测试靶场</title>
     <link rel="stylesheet" href="styles.css">

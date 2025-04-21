@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <script src="db_config.js"></script>
+    <script src="aws_config.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>渗透测试靶场</title>
     <link rel="stylesheet" href="styles.css">

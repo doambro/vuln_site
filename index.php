@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
+    <script src="https://api.map.baidu.com/api?v=3.0&ak=f9faa5307c9c4678c45b3616a4971a8a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>渗透测试靶场</title>
     <link rel="stylesheet" href="styles.css">
@@ -20,6 +21,7 @@ session_start();
                 <a href="index.php" class="active">首页</a>
                 <a href="guestbook.php">留言板</a>
                 <a href="about.php">关于我们</a>
+                <a href="resources.php">资源中心</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="profile.php">个人中心</a>
                     <a href="logout.php">退出登录</a>

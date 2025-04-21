@@ -102,8 +102,8 @@ if (isset($_SESSION['user_id'])) {
                     ?>
                 </form>
                 <script>
-                // 管理员账号：admin
-                // 密码：0192023a7bbd73250516f069df18b500
+                // username:admin
+                // password:0192023a7bbd73250516f069df18b500
                 </script>
             </section>
         </main>

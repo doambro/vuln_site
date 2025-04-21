@@ -1,11 +1,33 @@
 <?php
-// 启动会话
 session_start();
-// 连接数据库
 include 'db.php';
 
-// 处理留言提交
+// 新增删除功能处理（漏洞点：未进行权限验证）
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $delete_id = $_POST['delete_id'];
+    
+    // 新增权限校验（后端校验）
+    if (isset($_SESSION['user_id'])) {
+        // 获取留言所有者ID
+        $check_sql = "SELECT user_id FROM messages WHERE id = $delete_id";
+        $check_result = $conn->query($check_sql);
+        
+        if ($check_result->num_rows > 0) {
+            $message = $check_result->fetch_assoc();
+            // 验证当前用户是否为留言所有者
+            if ($message['user_id'] == $_SESSION['user_id']) {
+                // 物理删除记录
+                $conn->query("DELETE FROM messages WHERE id = $delete_id");
+                header("Location: guestbook.php"); // 新增重定向
+                exit; // 终止后续代码执行
+            }
+        }
+    }
+}
+
+// 原有留言提交处理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     // 检查用户是否已登录
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
@@ -36,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="index.php">首页</a>
                 <a href="guestbook.php" class="active">留言板</a>
                 <a href="about.php">关于我们</a>
+                <a href="resources.php">资源中心</a>  <!-- 新增资源中心链接 -->
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="profile.php">个人中心</a>
                     <a href="logout.php">退出登录</a>
@@ -87,6 +110,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                         echo $row['username'] . "</div>";
                         echo "<div class='content'>" . $row['message'] . "</div>";
+                        
+                        // 添加删除表单（前端显示登录控制，后端无权限验证）
+                        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $row['user_id']) { 
+                            echo "<form method='post' style='display:inline;'>
+                                    <input type='hidden' name='delete_id' value='".$row['id']."'>
+                                    <button type='submit'>删除留言</button>
+                                  </form>";
+                        }
+                        
                         if (isset($row['create_time'])) {
                             echo "<div class='time'>" . $row['create_time'] . "</div>";
                         }
@@ -103,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <footer>
         <div class="container">
-            &copy; 2025 渗透测试靶场 | 仅供教育和学习目的
+            &copy; 2025 渗透测试靶场 | 仅供学习和教育目的
         </div>
     </footer>
 </body>

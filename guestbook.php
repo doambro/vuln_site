@@ -2,27 +2,14 @@
 session_start();
 include 'db.php';
 
-// 新增删除功能处理（漏洞点：未进行权限验证）
+// 新增删除功能处理（保留未授权漏洞）
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = $_POST['delete_id'];
     
-    // 新增权限校验（后端校验）
-    if (isset($_SESSION['user_id'])) {
-        // 获取留言所有者ID
-        $check_sql = "SELECT user_id FROM messages WHERE id = $delete_id";
-        $check_result = $conn->query($check_sql);
-        
-        if ($check_result->num_rows > 0) {
-            $message = $check_result->fetch_assoc();
-            // 验证当前用户是否为留言所有者
-            if ($message['user_id'] == $_SESSION['user_id']) {
-                // 物理删除记录
-                $conn->query("DELETE FROM messages WHERE id = $delete_id");
-                header("Location: guestbook.php"); // 新增重定向
-                exit; // 终止后续代码执行
-            }
-        }
-    }
+    // 直接删除记录（无权限验证）
+    $conn->query("DELETE FROM messages WHERE id = $delete_id");
+    header("Location: guestbook.php");
+    exit;
 }
 
 // 原有留言提交处理
